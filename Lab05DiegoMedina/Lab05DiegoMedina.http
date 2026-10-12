@@ -1,0 +1,44 @@
+@host = http://localhost:5024
+
+### Login (devuelve el token JWT) — parámetros simples por query
+# @name loginAdmin
+POST {{host}}/api/Auth/login?userName=admin&password=Admin1234
+
+### Login rol Profesor
+# @name loginProfesor
+POST {{host}}/api/Auth/login?userName=profesor&password=Profesor1234
+
+### Login rol Estudiante
+# @name loginEstudiante
+POST {{host}}/api/Auth/login?userName=estudiante&password=Estudiante1234
+
+### Registro público (siempre queda como Estudiante)
+POST {{host}}/api/Auth/register?userName=nuevo.usuario&password=ClaveSegura1234&nombre=Nuevo%20Usuario&correo=nuevo@colegio.edu
+
+### Listar usuarios (SoloAdmin)
+GET {{host}}/api/Auth/usuarios
+Authorization: Bearer {{loginAdmin.response.body.accessToken}}
+
+### Ver un usuario (SoloAdmin)
+GET {{host}}/api/Auth/usuarios/2
+Authorization: Bearer {{loginAdmin.response.body.accessToken}}
+
+### Cambiar el rol de un usuario (SoloAdmin)
+PUT {{host}}/api/Auth/usuarios/4/rol?rol=Estudiante
+Authorization: Bearer {{loginAdmin.response.body.accessToken}}
+
+### Reporte (SoloAdmin)
+GET {{host}}/api/Auth/admin/reporte
+Authorization: Bearer {{loginAdmin.response.body.accessToken}}
+
+### Eliminar usuario (SoloAdmin)
+DELETE {{host}}/api/Auth/usuarios/4
+Authorization: Bearer {{loginAdmin.response.body.accessToken}}
+
+### Listar cursos (cualquier usuario autenticado)
+GET {{host}}/api/Cursos
+Authorization: Bearer {{loginProfesor.response.body.accessToken}}
+
+### Listar estudiantes (ProfesorOAdmin)
+GET {{host}}/api/Estudiantes
+Authorization: Bearer {{loginProfesor.response.body.accessToken}}
